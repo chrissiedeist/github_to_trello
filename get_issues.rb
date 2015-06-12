@@ -33,7 +33,6 @@ class GithubToTrello
     @board = Trello::Board.all.detect do |board|
       board.name =~ /Github/
     end
-    puts @board.name
   end
 
   def run
@@ -48,23 +47,33 @@ class GithubToTrello
     end
 
     if list
-
       puts "In list: #{language} #{list}"
       issues = old_issues_for(language)
-      puts issues
       issues.each do |issue|
-        if new_issue?(list, issue)
-          Trello::Card.create(
-            :name => issue.title,
-            :desc => issue.body,
-            :list_id => list.id
-          )
+        if card = card_exists(list, issue)
+          update(card, issue)
+        else
+          create_card(list, issue)
         end
       end
     else
       Trello::List.create(:name => "braintree_#{language}", :board_id => @board.id)
     end
+  end
 
+  def update(card, issue)
+    if issue.updated_at < (Time.now - DAYS_TIL_OLD * SECONDS_PER_DAY)
+      card.card_labels = [:yellow]
+      card.save
+    end
+  end
+
+  def create_card(list, issue)
+    Trello::Card.create(
+      :name => issue.title,
+      :desc => issue.body,
+      :list_id => list.id
+    )
   end
 
   def old_issues_for(language)
@@ -72,10 +81,10 @@ class GithubToTrello
     issues.select { |issue| issue.updated_at < (Time.now - DAYS_TIL_OLD * SECONDS_PER_DAY) }
   end
 
-  def new_issue?(list, issue)
-    list.cards.select do |card|
+  def card_exists(list, issue)
+    list.cards.detect do |card|
       card.name == issue.title
-    end.empty?
+    end
   end
 end
 
