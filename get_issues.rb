@@ -6,9 +6,10 @@ require 'dotenv'
 
 Dotenv.load
 
-LANGUAGES = %W(ruby java)#node python java dotnet ios php perl)
+LANGUAGES = %W(java ruby node python java dotnet ios php perl)
 SECONDS_PER_DAY = 60 * 60 * 24
 DAYS_TIL_OLD = 14
+DAYS_TIL_REALLY_OLD = 28
 
 class GithubToTrello
   def initialize
@@ -48,12 +49,13 @@ class GithubToTrello
 
     if list
       puts "In list: #{language} #{list}"
-      issues = old_issues_for(language)
+      issues = issues_for(language)
       issues.each do |issue|
         if card = card_exists(list, issue)
           update(card, issue)
         else
-          create_card(list, issue)
+          card = create_card(list, issue)
+          update(card, issue)
         end
       end
     else
@@ -62,23 +64,28 @@ class GithubToTrello
   end
 
   def update(card, issue)
-    if issue.updated_at < (Time.now - DAYS_TIL_OLD * SECONDS_PER_DAY)
+    card.desc = issue.body
+    card.desc += issue.html_url
+    if issue.updated_at < (Time.now - DAYS_TIL_REALLY_OLD * SECONDS_PER_DAY)
+      card.card_labels = [:red]
+      card.save
+    elsif issue.updated_at < (Time.now - DAYS_TIL_OLD * SECONDS_PER_DAY)
       card.card_labels = [:yellow]
       card.save
     end
+    card.delete if issue.closed_at?
   end
 
   def create_card(list, issue)
     Trello::Card.create(
       :name => issue.title,
-      :desc => issue.body,
       :list_id => list.id
     )
   end
 
-  def old_issues_for(language)
+  def issues_for(language)
     issues = Octokit.issues "braintree/braintree_#{language}"
-    issues.select { |issue| issue.updated_at < (Time.now - DAYS_TIL_OLD * SECONDS_PER_DAY) }
+    #issues.select { |issue| !issue.closed_at? }
   end
 
   def card_exists(list, issue)
@@ -115,5 +122,6 @@ GithubToTrello.new.run
 #
 #
 #
-#TODO: update with labels if it is a certain age
 #update if the number of comments has changed
+#indicate whether PR or Ussue
+#make a cron
