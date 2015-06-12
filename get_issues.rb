@@ -1,39 +1,72 @@
+#http://www.sitepoint.com/customizing-trello-ruby/
 require 'octokit'
 require 'trello'
 require 'dotenv'
 
+
 Dotenv.load
 
+LANGUAGES = %W(ruby java)#node python java dotnet ios php perl)
+SECONDS_PER_DAY = 60 * 60 * 24
+DAYS_TIL_OLD = 14
 
-Octokit.configure do |c|
-  c.login = 'chrissie.deist@gmail.com'
-  c.password = ENV['GITHUB_PASSWORD']
+class GithubToTrello
+  def initialize
+
+    configure_trello
+    configure_github
+  end
+
+  def configure_github
+    Octokit.configure do |c|
+      c.login = 'chrissie.deist@gmail.com'
+      c.password = ENV['GITHUB_PASSWORD']
+    end
+  end
+
+  def configure_trello
+    Trello.configure do |c|
+      c.developer_public_key = ENV['PUBLIC_KEY']
+      c.member_token = ENV['TOKEN']
+    end
+
+    @board = Trello::Board.all.detect do |board|
+      board.name =~ /Github/
+    end
+    puts @board.name
+  end
+
+  def run
+    LANGUAGES.each do |language|
+      add_cards_for(language)
+    end
+  end
+
+  def add_cards_for(language)
+    list = @board.lists.detect do |list|
+      puts "List is: #{list}"
+
+      list.name =~ /#{language}/
+    end
+
+    if list
+      # add cards
+    else
+      Trello::List.create(:name => "braintree_#{language}", :board_id => @board.id)
+    end
+
+  end
+
+  def old_issues_for(language)
+    issues = Octokit.issues "braintree/braintree_#{language}"
+    issues.select { |issue| issue.updated_at < (Time.now - DAYS_TIL_OLD * SECONDS_PER_DAY) }
+  end
 end
 
-Trello.configure do |c|
-  c.developer_public_key = ENV['PUBLIC_KEY']
-  c.member_token = ENV['TOKEN']
-end
 
-me = Trello::Member.find("chrissiedeist1")
 
-github_board = Trello::Board.all.detect do |board|
-  board.name =~ /Github/
-end
+GithubToTrello.new.run
 
-Trello::List.create(:name => "New List", :board_id => github_board.id)
-
-# libraries = %W(ruby node python java dotnet ios php perl)
-#
-# all_issues = []
-# libraries.each do |language|
-#   issues = Octokit.issues "braintree/braintree_#{language}"
-#   all_issues.concat(issues)
-# end
-#
-# DAYS = 60 * 60 * 24
-#
-# old_issues = all_issues.select { |issue| issue.updated_at < (Time.now - 14 * DAYS) }
 #
 # old_issues.each do |issue|
 #   puts issue.updated_at
