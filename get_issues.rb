@@ -47,21 +47,18 @@ class GithubToTrello
       list.name =~ /#{language}/
     end
 
-    if list
-      puts "In list: #{language} #{list}"
-      issues = issues_for(language)
-      issues.each do |issue|
-        if card = card_exists(list, issue)
-          update(card, issue)
-        else
-          card = create_card(list, issue)
-          update(card, issue)
-        end
+    list = list || Trello::List.create(:name => "braintree_#{language}", :board_id => @board.id)
+    issues = issues_for(language)
+    issues.each do |issue|
+      if card = card_exists(list, issue)
+        update(card, issue)
+      else
+        card = create_card(list, issue)
+        update(card, issue)
       end
-    else
-      Trello::List.create(:name => "braintree_#{language}", :board_id => @board.id)
     end
   end
+
 
   def update(card, issue)
     card.desc = issue.body
@@ -94,9 +91,6 @@ class GithubToTrello
     end
   end
 end
-
-
-
 
 GithubToTrello.new.run
 
