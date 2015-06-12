@@ -44,13 +44,23 @@ class GithubToTrello
 
   def add_cards_for(language)
     list = @board.lists.detect do |list|
-      puts "List is: #{list}"
-
       list.name =~ /#{language}/
     end
 
     if list
-      # add cards
+
+      puts "In list: #{language} #{list}"
+      issues = old_issues_for(language)
+      puts issues
+      issues.each do |issue|
+        if new_issue?(list, issue)
+          Trello::Card.create(
+            :name => issue.title,
+            :desc => issue.body,
+            :list_id => list.id
+          )
+        end
+      end
     else
       Trello::List.create(:name => "braintree_#{language}", :board_id => @board.id)
     end
@@ -61,7 +71,14 @@ class GithubToTrello
     issues = Octokit.issues "braintree/braintree_#{language}"
     issues.select { |issue| issue.updated_at < (Time.now - DAYS_TIL_OLD * SECONDS_PER_DAY) }
   end
+
+  def new_issue?(list, issue)
+    list.cards.select do |card|
+      card.name == issue.title
+    end.empty?
+  end
 end
+
 
 
 
@@ -87,3 +104,7 @@ GithubToTrello.new.run
 # puts "closed_at is #{issue.closed_at}"
 # puts "body is #{issue.body}"
 #
+#
+#
+#TODO: update with labels if it is a certain age
+#update if the number of comments has changed
