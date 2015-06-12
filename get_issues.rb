@@ -6,7 +6,7 @@ require 'dotenv'
 
 Dotenv.load
 
-LANGUAGES = %W(java ruby node python java dotnet ios php perl)
+LANGUAGES = %W(perl)
 SECONDS_PER_DAY = 60 * 60 * 24
 DAYS_TIL_OLD = 14
 DAYS_TIL_REALLY_OLD = 28
@@ -49,16 +49,15 @@ class GithubToTrello
 
     list = list || Trello::List.create(:name => "braintree_#{language}", :board_id => @board.id)
     issues = issues_for(language)
-    issues.each do |issue|
-      if card = card_exists(list, issue)
-        update(card, issue)
-      else
-        card = create_card(list, issue)
-        update(card, issue)
-      end
-    end
+    create_or_update_cards(list, issues)
   end
 
+  def create_or_update_cards(list, issues)
+    issues.each do |issue|
+      card = card_exists(list, issue) || create_card(list, issue)
+      update(card, issue)
+    end
+  end
 
   def update(card, issue)
     card.desc = issue.body
