@@ -120,10 +120,10 @@ GithubToTrello.new.run
 #update if the number of comments has changed
 #indicate whether PR orIUssue
 #make a cron
+#add due_dates
 #
 #Sites used for reference
 #
 #http://www.sitepoint.com/customizing-trello-ruby/
 #https://github.com/jeremytregunna/ruby-trello/blob/master/lib/trello/card.rb
 #
-#add due_dates
