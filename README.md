@@ -10,9 +10,9 @@ https://trello.com/b/4hLKzikU/support-devs-client-library-cleanup
 
 3. The dotenv gem and a .env file with with the following variables
    defined:
-   - GITHUB_USERNAME
-   - GITHUB_PASSWORD
-   - PUBLIC_KEY - Log into trello and visit https://trello.com/app-key
+   - `GITHUB_USERNAME`
+   - `GITHUB_PASSWORD`
+   - `PUBLIC_KEY` - Log into trello and visit https://trello.com/app-key
    - `TOKEN` - Go to
      https://trello.com/1/connect?key=...&name=MyApp&response_type=token&scope=read,write 
     (substituting the public key for ... a unique name for MyApp)
