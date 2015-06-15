@@ -1,5 +1,3 @@
-#http://www.sitepoint.com/customizing-trello-ruby/
-#https://github.com/jeremytregunna/ruby-trello/blob/master/lib/trello/card.rb
 require 'octokit'
 require 'trello'
 require 'dotenv'
@@ -96,27 +94,36 @@ end
 GithubToTrello.new.run
 
 #
-# old_issues.each do |issue|
-#   puts issue.updated_at
+# issues = Octokit.issues "braintree/braintree_#{language}"
+#
+# issues.each do |issue|
+#
+#   puts "User is #{issue.user}"
+#   puts "state is #{issue.state}"
+#   puts "url is #{issue.url}"
+#   puts "title is #{issue.title}"
+#   puts "id is #{issue.id}"
+#   puts "assignee is #{issue.assignee}"
+#   puts "assignee is #{issue.assignee?}"
+#   puts "comments is #{issue.comments}"
+#   puts "comment is #{issue.comment?}"
+#   puts "created_at is #{issue.created_at}"
+#   puts "updated_at is #{issue.updated_at}"
+#   puts "closed_at is #{issue.closed_at}"
+#   puts "body is #{issue.body}"
+#
 # end
 #
-# puts old_issues.size
-# puts "User is #{issue.user}"
-# puts "state is #{issue.state}"
-# puts "url is #{issue.url}"
-# puts "title is #{issue.title}"
-# puts "id is #{issue.id}"
-# puts "assignee is #{issue.assignee}"
-# puts "assignee is #{issue.assignee?}"
-# puts "comments is #{issue.comments}"
-# puts "comment is #{issue.comment?}"
-# puts "created_at is #{issue.created_at}"
-# puts "updated_at is #{issue.updated_at}"
-# puts "closed_at is #{issue.closed_at}"
-# puts "body is #{issue.body}"
 #
-#
+#TODO
 #
 #update if the number of comments has changed
-#indicate whether PR or Ussue
+#indicate whether PR orIUssue
 #make a cron
+#
+#Sites used for reference
+#
+#http://www.sitepoint.com/customizing-trello-ruby/
+#https://github.com/jeremytregunna/ruby-trello/blob/master/lib/trello/card.rb
+#
+#add due_dates
