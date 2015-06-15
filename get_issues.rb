@@ -5,7 +5,7 @@ require 'dotenv'
 
 Dotenv.load
 
-LANGUAGES = %W(perl)
+LANGUAGES = %W(ruby java dotnet node python php)
 SECONDS_PER_DAY = 60 * 60 * 24
 DAYS_TIL_OLD = 14
 DAYS_TIL_REALLY_OLD = 28
@@ -19,7 +19,7 @@ class GithubToTrello
 
   def configure_github
     Octokit.configure do |c|
-      c.login = 'chrissie.deist@gmail.com'
+      c.login = ENV['GITHUB_USERNAME']
       c.password = ENV['GITHUB_PASSWORD']
     end
   end
