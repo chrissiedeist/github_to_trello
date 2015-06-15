@@ -1,4 +1,5 @@
 #http://www.sitepoint.com/customizing-trello-ruby/
+#https://github.com/jeremytregunna/ruby-trello/blob/master/lib/trello/card.rb
 require 'octokit'
 require 'trello'
 require 'dotenv'
@@ -54,7 +55,7 @@ class GithubToTrello
 
   def create_or_update_cards(list, issues)
     issues.each do |issue|
-      card = card_exists(list, issue) || create_card(list, issue)
+      card = existing_card?(list, issue) || create_card(list, issue)
       update(card, issue)
     end
   end
@@ -62,6 +63,7 @@ class GithubToTrello
   def update(card, issue)
     card.desc = issue.body
     card.desc += issue.html_url
+
     if issue.updated_at < (Time.now - DAYS_TIL_REALLY_OLD * SECONDS_PER_DAY)
       card.card_labels = [:red]
       card.save
@@ -84,7 +86,7 @@ class GithubToTrello
     #issues.select { |issue| !issue.closed_at? }
   end
 
-  def card_exists(list, issue)
+  def exisiting_card?(list, issue)
     list.cards.detect do |card|
       card.name == issue.title
     end
