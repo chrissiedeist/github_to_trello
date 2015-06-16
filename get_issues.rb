@@ -2,7 +2,6 @@ require 'octokit'
 require 'trello'
 require 'dotenv'
 
-
 Dotenv.load
 
 LANGUAGES = %W(ruby java dotnet node python php)
@@ -84,7 +83,7 @@ class GithubToTrello
     #issues.select { |issue| !issue.closed_at? }
   end
 
-  def exisiting_card?(list, issue)
+  def existing_card?(list, issue)
     list.cards.detect do |card|
       card.name == issue.title
     end
@@ -93,9 +92,10 @@ end
 
 GithubToTrello.new.run
 
+
+# Example usage of Github API:
 #
 # issues = Octokit.issues "braintree/braintree_#{language}"
-#
 # issues.each do |issue|
 #
 #   puts "User is #{issue.user}"
@@ -113,17 +113,3 @@ GithubToTrello.new.run
 #   puts "body is #{issue.body}"
 #
 # end
-#
-#
-#TODO
-#
-#update if the number of comments has changed
-#indicate whether PR orIUssue
-#make a cron
-#add due_dates
-#
-#Sites used for reference
-#
-#http://www.sitepoint.com/customizing-trello-ruby/
-#https://github.com/jeremytregunna/ruby-trello/blob/master/lib/trello/card.rb
-#

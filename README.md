@@ -17,4 +17,13 @@ https://trello.com/b/4hLKzikU/support-devs-client-library-cleanup
      https://trello.com/1/connect?key=...&name=MyApp&response_type=token&scope=read,write 
     (substituting the public key for ... a unique name for MyApp)
   
+# TODO
 
+- update card if the number of comments has changed
+- indicate whether card is for PR or Issue
+- make it a cron
+- add due dates
+
+Sites used for reference
+http://www.sitepoint.com/customizing-trello-ruby/
+https://github.com/jeremytregunna/ruby-trello/blob/master/lib/trello/card.rb
