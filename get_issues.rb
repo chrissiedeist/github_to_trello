@@ -59,6 +59,7 @@ class GithubToTrello
 
   def update(card, issue)
     card.desc = issue.body
+    card.desc += "\n"
     card.desc += issue.html_url
 
     if issue.updated_at < (Time.now - DAYS_TIL_REALLY_OLD * SECONDS_PER_DAY)
