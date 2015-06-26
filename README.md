@@ -24,6 +24,7 @@ Running this script requires:
    defined:
    - `GITHUB_USERNAME`
    - `GITHUB_PASSWORD`
+   - `PARENT_REPO` - The github account where the individual repos live (`braintree`)
    - `TRELLO_BOARD_NAME` - The name of the board you wish to populate (https://trello.com/b/ql8IVZYb/client-library-github-issues)
    - `REPOS` - (defaults to braintree client libraries)
    - `PUBLIC_KEY` - Log into trello and visit https://trello.com/app-key

@@ -4,7 +4,6 @@ require 'dotenv'
 
 Dotenv.load
 
-LANGUAGES = %W(node) # ruby java dotnet python php)
 SECONDS_PER_DAY = 60 * 60 * 24
 DAYS_TIL_OLD = 14
 DAYS_TIL_REALLY_OLD = 28
@@ -13,6 +12,7 @@ class GithubToTrello
   def initialize
     configure_trello
     configure_github
+    @repos = ["braintree_node"]
   end
 
   def configure_github
@@ -34,18 +34,17 @@ class GithubToTrello
   end
 
   def run
-    LANGUAGES.each do |language|
-      add_cards_for(language)
+    full_repos.each do |repo|
+      add_cards_for(repo)
     end
   end
 
-  def add_cards_for(language)
+  def add_cards_for(repo)
     list = @board.lists.detect do |list|
-      list.name =~ /#{language}/
+      list.name =~ /#{repo}/
     end
 
-    list = list || Trello::List.create(:name => "braintree_#{language}", :board_id => @board.id)
-    repo = "braintree/braintree_#{language}"
+    list = list || Trello::List.create(:name => repo, :board_id => @board.id)
     issues = issues_for(repo)
     create_or_update_cards(list, issues)
   end
@@ -87,6 +86,10 @@ class GithubToTrello
     list.cards.detect do |card|
       card.name == issue.title
     end
+  end
+
+  def full_repos
+    @repos.map { |repo| "#{ENV["PARENT_REPO"]}/#{repo}" }
   end
 end
 
