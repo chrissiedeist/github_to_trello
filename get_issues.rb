@@ -4,14 +4,13 @@ require 'dotenv'
 
 Dotenv.load
 
-LANGUAGES = %W(ruby java dotnet node python php)
+LANGUAGES = %W(node) # ruby java dotnet python php)
 SECONDS_PER_DAY = 60 * 60 * 24
 DAYS_TIL_OLD = 14
 DAYS_TIL_REALLY_OLD = 28
 
 class GithubToTrello
   def initialize
-
     configure_trello
     configure_github
   end
@@ -30,7 +29,7 @@ class GithubToTrello
     end
 
     @board = Trello::Board.all.detect do |board|
-      board.name =~ /Github/
+      board.name =~ /#{ENV['TRELLO_BOARD_NAME']}/
     end
   end
 
@@ -46,7 +45,8 @@ class GithubToTrello
     end
 
     list = list || Trello::List.create(:name => "braintree_#{language}", :board_id => @board.id)
-    issues = issues_for(language)
+    repo = "braintree/braintree_#{language}"
+    issues = issues_for(repo)
     create_or_update_cards(list, issues)
   end
 
@@ -79,9 +79,8 @@ class GithubToTrello
     )
   end
 
-  def issues_for(language)
-    issues = Octokit.issues "braintree/braintree_#{language}"
-    #issues.select { |issue| !issue.closed_at? }
+  def issues_for(repo)
+    issues = Octokit.issues repo
   end
 
   def existing_card?(list, issue)
@@ -90,6 +89,7 @@ class GithubToTrello
     end
   end
 end
+
 
 GithubToTrello.new.run
 
