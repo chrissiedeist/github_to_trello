@@ -17,13 +17,8 @@ Running this script requires:
 
 1. A trello account with access to the board you are populating with github issues.
 
-2. A github account with access to the repos you are pulling from.
-   libraries
-
-3. A .env file with with the following variables
+2. A .env file with with the following variables
    defined:
-   - `GITHUB_USERNAME`
-   - `GITHUB_PASSWORD`
    - `PARENT_REPO` - The github account where the individual repos live (`braintree`)
    - `TRELLO_BOARD_NAME` - The name of the board you wish to populate (https://trello.com/b/ql8IVZYb/client-library-github-issues)
    - `REPOS` - (defaults to braintree client libraries)
