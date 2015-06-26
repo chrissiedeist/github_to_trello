@@ -1,3 +1,4 @@
+require_relative './github_gateway'
 require 'octokit'
 require 'trello'
 require 'dotenv'
@@ -11,15 +12,8 @@ DAYS_TIL_REALLY_OLD = 28
 class GithubToTrello
   def initialize
     configure_trello
-    configure_github
+    @github_gateway = GithubGateway.new(ENV['PARENT_REPO'])
     @repos = ["braintree_node"]
-  end
-
-  def configure_github
-    Octokit.configure do |c|
-      c.login = ENV['GITHUB_USERNAME']
-      c.password = ENV['GITHUB_PASSWORD']
-    end
   end
 
   def configure_trello
@@ -34,7 +28,7 @@ class GithubToTrello
   end
 
   def run
-    full_repos.each do |repo|
+    @repos.each do |repo|
       add_cards_for(repo)
     end
   end
@@ -45,7 +39,8 @@ class GithubToTrello
     end
 
     list = list || Trello::List.create(:name => repo, :board_id => @board.id)
-    issues = issues_for(repo)
+    puts "The repo is: #{repo}"
+    issues = @github_gateway.issues_for(repo)
     create_or_update_cards(list, issues)
   end
 
@@ -78,18 +73,10 @@ class GithubToTrello
     )
   end
 
-  def issues_for(repo)
-    issues = Octokit.issues repo
-  end
-
   def existing_card?(list, issue)
     list.cards.detect do |card|
       card.name == issue.title
     end
-  end
-
-  def full_repos
-    @repos.map { |repo| "#{ENV["PARENT_REPO"]}/#{repo}" }
   end
 end
 

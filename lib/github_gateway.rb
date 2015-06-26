@@ -1,8 +1,8 @@
 require 'octokit'
 
 class GithubGateway
-  def initialize(options)
-    @parent_repo = options[:parent_repo]
+  def initialize(parent_repo)
+    @parent_repo = parent_repo
   end
 
   def issues_for(repo)
