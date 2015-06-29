@@ -1,10 +1,12 @@
 # USAGE
 
-After completing the [setup](#setup), run `ruby github_to_trello.rb`
+After completing the [setup](#setup), run `ruby github_to_trello.rb
+[TRELLO_BOARD_NAME] [GITHUB_REPO_NAME]`
 
 ## Overview
-Use the github API to grab all open issues for specified repos. 
-For each repo, create/update a trello list on a specified board.
+Use the github API to grab all open issues for specified repo. 
+Creates a list with the repo name of the specified trello board.
+For each issue, create/update a trello card on that list.
 
 Running the script:
 - Creates a list for each specified repo (if a list for that repo is not already present)
@@ -19,9 +21,6 @@ Running this script requires:
 
 2. A .env file with with the following variables
    defined:
-   - `PARENT_REPO` - The github account where the individual repos live (`braintree`)
-   - `TRELLO_BOARD_NAME` - The name of the board you wish to populate (https://trello.com/b/ql8IVZYb/client-library-github-issues)
-   - `REPOS` - (defaults to braintree client libraries)
    - `PUBLIC_KEY` - Log into trello and visit https://trello.com/app-key
    - `TOKEN` - Go to
      https://trello.com/1/connect?key=...&name=MyApp&response_type=token&scope=read,write 
