@@ -12,8 +12,8 @@ class TrelloGateway
     end
 
     @board = _board(board_name)
-    @list = _list
     @repo = repo
+    @list = _list
   end
 
   def create_or_update_card(issue)
@@ -25,11 +25,12 @@ class TrelloGateway
   def _update(issue, card)
     if issue.updated_at < (Time.now - DAYS_TIL_REALLY_OLD * SECONDS_PER_DAY)
       card.card_labels = [:red]
-      card.save
     elsif issue.updated_at < (Time.now - DAYS_TIL_OLD * SECONDS_PER_DAY)
       card.card_labels = [:yellow]
-      card.save
+    else
+      card.card_labels = []
     end
+    card.save
     card
   end
 
@@ -43,7 +44,7 @@ class TrelloGateway
     Trello::Card.create(
       :name => issue.title,
       :list_id => @list.id,
-      :desc => issue.body + "\n" + issue.html_url + "\n" + issue.updated_at
+      :desc => issue.body + "\n" + issue.html_url + "\n" + issue.updated_at.to_s
     )
   end
 
@@ -57,6 +58,8 @@ class TrelloGateway
     list = @board.lists.detect do |list|
       list.name =~ /#{@repo}/
     end
+    puts list.inspect
+    puts @repo.inspect
     list = list || Trello::List.create(:name => @repo, :board_id => @board.id)
   end
 end
