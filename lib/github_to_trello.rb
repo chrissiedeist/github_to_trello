@@ -1,3 +1,4 @@
+require_relative './github_gateway'
 require_relative './trello_gateway'
 require 'octokit'
 require 'trello'
@@ -7,16 +8,15 @@ Dotenv.load
 
 class GithubToTrello
   def initialize(board_name, repo_name)
+    @github_gateway = GithubGateway.new(repo_name)
     @trello_gateway = TrelloGateway.new(ENV['PUBLIC_KEY'],
                                         ENV['TOKEN'],
                                         board_name,
                                         repo_name)
-    @repo = repo_name
   end
 
   def update
-    issues = Octokit.issues @repo
-    issues.each do |issue|
+    @github_gateway.issues.each do |issue|
       @trello_gateway.create_or_update_card(issue)
     end
   end

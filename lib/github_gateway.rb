@@ -1,12 +1,11 @@
 require 'octokit'
 
 class GithubGateway
-  def initialize(parent_repo)
-    @parent_repo = parent_repo
+  def initialize(repo)
+    @repo = repo
   end
 
-  def issues_for(repo)
-    full_repo = "#{@parent_repo}/#{repo}"
-    Octokit.issues full_repo
+  def issues
+    Octokit.issues @repo
   end
 end
