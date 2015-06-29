@@ -20,18 +20,17 @@ class GithubToTrello
       @trello_gateway.create_or_update_card(issue)
     end
   end
-
-  def _usage
-    "./github_to_trello [trello_board_name] [github_repo_name]"
-  end
 end
 
 if __FILE__ == $PROGRAM_NAME
-  unless ARGV.length == 2
-    puts _usage
-    exit 0
-  end
+  cl_languages = %w(ruby node php java dotnet python)
+  board_name = "Client Library Github Issues"
 
-  GithubToTrello.new(ARGV[0], ARGV[1]).update
+  cl_languages.each do |language|
+    repo = "braintree/braintree_#{language}"
+    puts "Updating #{repo}"
+
+    GithubToTrello.new(board_name, repo).update
+  end
 end
 
