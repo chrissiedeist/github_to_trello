@@ -1,7 +1,6 @@
 # USAGE
 
-After completing the [setup](#setup), run `ruby github_to_trello.rb
-[TRELLO_BOARD_NAME] [GITHUB_REPO_NAME]`
+After completing the [setup](#setup), run `ruby github_to_trello.rb`
 
 ## Overview
 Use the github API to grab all open issues for specified repo. 

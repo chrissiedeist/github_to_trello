@@ -7,10 +7,10 @@ require 'dotenv'
 Dotenv.load
 
 class GithubToTrello
-  def initialize(board_name, repo_name)
+  def initialize(board_name, repo_name, public_key, token)
     @github_gateway = GithubGateway.new(repo_name)
-    @trello_gateway = TrelloGateway.new(ENV['PUBLIC_KEY'],
-                                        ENV['TOKEN'],
+    @trello_gateway = TrelloGateway.new(public_key,
+                                        token,
                                         board_name,
                                         repo_name)
   end
@@ -23,14 +23,14 @@ class GithubToTrello
 end
 
 if __FILE__ == $PROGRAM_NAME
-  cl_languages = %w(ruby node php java dotnet python)
-  board_name = "Client Library Github Issues"
+  board_name = ENV["BOARD_NAME"]
+  repos = ENV["REPOS"].split(",")
+  public_key = ENV["PUBLIC_KEY"]
+  token = ENV["TOKEN"]
 
-  cl_languages.each do |language|
-    repo = "braintree/braintree_#{language}"
-    puts "Updating #{repo}"
-
-    GithubToTrello.new(board_name, repo).update
+  repos.each do |repo|
+    puts "Updating repo: #{repo}"
+    GithubToTrello.new(board_name, repo, public_key, token).update
   end
 end
 

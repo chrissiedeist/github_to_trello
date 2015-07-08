@@ -24,7 +24,7 @@ describe TrelloGateway do
       card = @gateway.create_or_update_card(@issue) 
       expect(card.class).to be(Trello::Card)
       expect(card.name).to eq("Test")
-      expect(card.list.name).to eq("django_blog")
+      expect(card.list.name).to eq("chrissiedeist/django_blog")
 
     end
 
@@ -48,7 +48,6 @@ describe TrelloGateway do
       )
       card = @gateway.create_or_update_card(updated_issue) 
       expect(card.card_labels).to eq([:red])
-
     end
   end
 end

@@ -58,8 +58,6 @@ class TrelloGateway
     list = @board.lists.detect do |list|
       list.name =~ /#{@repo}/
     end
-    puts list.inspect
-    puts @repo.inspect
     list = list || Trello::List.create(:name => @repo, :board_id => @board.id)
   end
 end
