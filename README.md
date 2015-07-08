@@ -11,7 +11,6 @@ Running the script:
 - Creates a list for each specified repo (if a list for that repo is not already present)
 - Adds or updates cards for all open issues or PRs in that repo
 - Adds or updates color labels to cards based on date last updated
-- Removes cards for issues that have been closed 
 
 ## Setup
 Running this script requires:
