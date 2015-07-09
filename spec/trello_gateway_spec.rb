@@ -6,10 +6,11 @@ describe TrelloGateway do
   before(:each) do
     public_key = "56acdaa7404ebcc8bbaffab18428d4d2"
     token = "748c2116942c251bf6ed8000c13196293443ddcb407422ccacd92d0001b831da"
-    board = "Github-to-Trello Test Board"
+    board_id = "5jGWvKui"
+    #board = "Github-to-Trello Test Board"
     repo = "django_blog"
 
-    @gateway = TrelloGateway.new(public_key, token, board, repo)
+    @gateway = TrelloGateway.new(public_key, token, board_id, repo)
     @issue = double(:issue, 
       :title => "Test", 
       :id => "91374795", 

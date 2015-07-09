@@ -19,7 +19,7 @@ Running this script requires:
 
 2. A .env file with with the following variables
    defined:
-   - `BOARD_NAME` - The name of the trello card to add the cards to
+   - `BOARD_ID` - The ID of the trello board to add the cards to
    - `REPOS` - The name(s) of the github repos to pull issues from
      (comma separated: `REPOS=your_name/your_repo,your_name/your_other_repo`)
    - `PUBLIC_KEY` - Log into trello and visit https://trello.com/app-key

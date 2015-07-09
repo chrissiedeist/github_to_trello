@@ -7,11 +7,11 @@ require 'dotenv'
 Dotenv.load
 
 class GithubToTrello
-  def initialize(board_name, repo_name, public_key, token)
+  def initialize(public_key, token, board_id, repo_name)
     @github_gateway = GithubGateway.new(repo_name)
     @trello_gateway = TrelloGateway.new(public_key,
                                         token,
-                                        board_name,
+                                        board_id,
                                         repo_name)
   end
 
@@ -23,14 +23,14 @@ class GithubToTrello
 end
 
 if __FILE__ == $PROGRAM_NAME
-  board_name = ENV["BOARD_NAME"]
-  repos = ENV["REPOS"].split(",")
   public_key = ENV["PUBLIC_KEY"]
   token = ENV["TOKEN"]
+  board_id = ENV["BOARD_ID"]
+  repos = ENV["REPOS"].split(",")
 
   repos.each do |repo|
     puts "Updating repo: #{repo}"
-    GithubToTrello.new(board_name, repo, public_key, token).update
+    GithubToTrello.new(public_key, token, board_id, repo).update
   end
 end
 

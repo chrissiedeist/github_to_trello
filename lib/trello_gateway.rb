@@ -5,13 +5,13 @@ DAYS_TIL_OLD = 14
 DAYS_TIL_REALLY_OLD = 28
 
 class TrelloGateway
-  def initialize(public_key, token, board_name, repo)
+  def initialize(public_key, token, board_id, repo)
     Trello.configure do |c|
       c.developer_public_key = public_key
       c.member_token = token
     end
 
-    @board = _board(board_name)
+    @board = _board(board_id)
     @repo = repo
     @list = _list
   end
@@ -48,10 +48,8 @@ class TrelloGateway
     )
   end
 
-  def _board(name)
-    Trello::Board.all.detect do |board|
-      board.name =~ /#{name}/
-    end
+  def _board(id)
+    Trello::Board.find(id)
   end
 
   def _list
