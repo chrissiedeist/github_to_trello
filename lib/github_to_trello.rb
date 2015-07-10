@@ -1,5 +1,5 @@
-require_relative './github_gateway'
-require_relative './trello_gateway'
+require_relative './github_to_trello/github_gateway'
+require_relative './github_to_trello/trello_gateway'
 require 'octokit'
 require 'trello'
 require 'dotenv'
