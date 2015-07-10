@@ -1,14 +1,12 @@
 ## Overview
-Use the github API to grab all open issues for specified repo. 
-Creates a list with the repo name of the specified trello board.
-For each issue, create/update a trello card on that list.
+Creates/updates trello cards for all open issues in specified github repo. 
 
 Running this script/using this gem:
-- Creates a list for each specified repo (if a list for that repo is not already present)
+- Creates a list for specified repo (if a list for that repo is not already present)
 - Adds or updates cards for all open issues or PRs in that repo
 - Adds or updates color labels to cards based on date last updated
 
-# SETUP 
+## PREREQUISITES 
 
 1. A trello account with access to the board you are populating with github issues.
 2. A public key and token giving access to that trello account
@@ -32,7 +30,7 @@ Running this script/using this gem:
 
 2. Run `ruby github_to_trello.rb`
 
-# USAGE 2: (installing gem)
+# USAGE 2: (gem)
 
 `gem install github_to_trello'
 
