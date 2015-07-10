@@ -32,7 +32,7 @@ Running this script/using this gem:
 
 ## USAGE 2: (gem)
 
-`gem install github_to_trello'
+`gem install github_to_trello`
 
 ```
 require 'github_to_trello'
@@ -47,5 +47,5 @@ GithubToTrello.new(public_key, token, board_id, repo_name).update
 
 
 Sites used for reference
-http://www.sitepoint.com/customizing-trello-ruby/
-https://github.com/jeremytregunna/ruby-trello/blob/master/lib/trello/card.rb
+- http://www.sitepoint.com/customizing-trello-ruby/
+- https://github.com/jeremytregunna/ruby-trello/blob/master/lib/trello/card.rb
