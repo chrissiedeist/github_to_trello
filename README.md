@@ -6,7 +6,7 @@ Running this script/using this gem:
 - Adds or updates cards for all open issues or PRs in that repo
 - Adds or updates color labels to cards based on date last updated
 
-## PREREQUISITES 
+## Prerequisites
 
 1. A trello account with access to the board you are populating with github issues.
 2. A public key and token giving access to that trello account
@@ -16,7 +16,7 @@ Running this script/using this gem:
     (substituting the public key for ... a unique name for MyApp)
 
 
-# USAGE 1: (running as a standalone script)
+## USAGE 1: (running as a standalone script)
 
 1. Create a .env file with with the following variables
    defined:
@@ -30,7 +30,7 @@ Running this script/using this gem:
 
 2. Run `ruby github_to_trello.rb`
 
-# USAGE 2: (gem)
+## USAGE 2: (gem)
 
 `gem install github_to_trello'
 
