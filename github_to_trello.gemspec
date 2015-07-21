@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["chrissie.deist@gmail.com"]
   spec.description   = %q{A gem for converting github issues into trello cards}
   spec.summary       = %q{Pulls github issues from specified repos and automatically creates/populates trello lists with the repo names on a specified board.}
-  spec.homepage      = "http://rubygems.org/gems/github_to_trello"
+  spec.homepage      = "https://github.com/chrissiedeist/github_to_trello"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
