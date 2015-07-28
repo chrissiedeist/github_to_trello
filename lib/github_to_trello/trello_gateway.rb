@@ -23,9 +23,9 @@ class TrelloGateway
   end
 
   def _update(issue, card)
-    if issue.updated_at < (Time.now - DAYS_TIL_REALLY_OLD * SECONDS_PER_DAY)
+    if DateTime.parse(issue.updated_at) < (Time.now - DAYS_TIL_REALLY_OLD * SECONDS_PER_DAY)
       card.card_labels = [:red]
-    elsif issue.updated_at < (Time.now - DAYS_TIL_OLD * SECONDS_PER_DAY)
+    elsif DateTime.parse(issue.updated_at) < (Time.now - DAYS_TIL_OLD * SECONDS_PER_DAY)
       card.card_labels = [:yellow]
     else
       card.card_labels = []

@@ -1,11 +1,11 @@
 require 'dotenv'
 require 'rspec'
-require 'trello_gateway'
+require_relative '../lib/github_to_trello/trello_gateway'
 
 describe TrelloGateway do
   before(:each) do
     public_key = "56acdaa7404ebcc8bbaffab18428d4d2"
-    token = "748c2116942c251bf6ed8000c13196293443ddcb407422ccacd92d0001b831da"
+    token = "bdb6210e5a6484def4fb990626f7bafaa2eaf9bdbb4bf74ef66028b85a0ac793"
     board_id = "5jGWvKui"
     repo = "django_blog"
 
@@ -13,7 +13,7 @@ describe TrelloGateway do
     @issue = double(:issue,
       :title => "Test",
       :id => "91374795",
-      :updated_at => "2015-06-26T22:08:36Z",
+      :updated_at => Time.now.to_s,
       :body => "This is a test",
       :html_url => "https://github.com/chrissiedeist/django_blog/issues/1",
     )
@@ -25,7 +25,6 @@ describe TrelloGateway do
       expect(card.class).to be(Trello::Card)
       expect(card.name).to eq("Test")
       expect(card.list.name).to eq("chrissiedeist/django_blog")
-
     end
 
     it "does not add a duplicate card if card exits" do
