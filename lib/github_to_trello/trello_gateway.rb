@@ -5,6 +5,8 @@ DAYS_TIL_OLD = 14
 DAYS_TIL_REALLY_OLD = 28
 
 class TrelloGateway
+  attr_reader :list, :board
+
   def initialize(public_key, token, board_id, repo)
     Trello.configure do |c|
       c.developer_public_key = public_key
@@ -35,7 +37,11 @@ class TrelloGateway
   end
 
   def _existing_card?(issue)
-    @list.cards.detect do |card|
+    unclaimed_card = @list.cards.detect do |card|
+      card.name == issue.title
+    end
+    return unclaimed_card unless _claimed_list
+    _claimed_list.cards.detect do |card|
       card.name == issue.title
     end
   end
@@ -57,5 +63,11 @@ class TrelloGateway
       list.name =~ /#{@repo}/
     end
     list = list || Trello::List.create(:name => @repo, :board_id => @board.id)
+  end
+
+  def _claimed_list
+    @board.lists.detect do |list|
+      list.name =~ /Claimed/
+    end
   end
 end
