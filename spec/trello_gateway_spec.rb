@@ -1,4 +1,3 @@
-require 'dotenv'
 require 'rspec'
 require_relative '../lib/github_to_trello/trello_gateway'
 
@@ -95,22 +94,6 @@ describe TrelloGateway do
       card.list.name.should == "Done"
       @done_list.cards.length.should == 1
       @gateway.list.cards.length.should == 0
-    end
-
-    it "adds a red label if card is more than 28 days old" do
-      card = @gateway.create_or_update_card(@issue)
-      expect(card.card_labels).to eq([])
-
-      updated_at = Date.today - 28.days
-      updated_issue = double(:issue,
-        :title => "Test",
-        :id => "91374795",
-        :updated_at => updated_at.to_s,
-        :body => "This is a test",
-        :html_url => "https://github.com/chrissiedeist/django_blog/issues/1",
-      )
-      card = @gateway.create_or_update_card(updated_issue)
-      expect(card.card_labels).to eq([:red])
     end
   end
 end

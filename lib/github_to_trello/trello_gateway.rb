@@ -22,19 +22,6 @@ class TrelloGateway
   def create_or_update_card(issue)
     existing_card = _existing_card?(issue)
     card = existing_card.nil? ? _create_card(issue) : existing_card
-    _update(issue, card)
-  end
-
-  def _update(issue, card)
-    if DateTime.parse(issue.updated_at) < (Time.now - DAYS_TIL_REALLY_OLD * SECONDS_PER_DAY)
-      card.card_labels = [:red]
-    elsif DateTime.parse(issue.updated_at) < (Time.now - DAYS_TIL_OLD * SECONDS_PER_DAY)
-      card.card_labels = [:yellow]
-    else
-      card.card_labels = []
-    end
-    card.save
-    card
   end
 
   def _existing_card?(issue)
