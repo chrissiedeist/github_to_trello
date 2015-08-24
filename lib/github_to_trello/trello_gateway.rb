@@ -7,20 +7,21 @@ DAYS_TIL_REALLY_OLD = 28
 class TrelloGateway
   attr_reader :list, :board
 
-  def initialize(public_key, token, board_id, repo)
+  def initialize(public_key, token, board_id, repo_name)
     Trello.configure do |c|
       c.developer_public_key = public_key
       c.member_token = token
     end
 
     @board = _board(board_id)
-    @repo = repo
-    @list = _list
+    @list = _list(repo_name)
+    @claimed_list = _list("Claimed")
+    @done_list = _list("Done")
   end
 
   def create_or_update_card(issue)
     existing_card = _existing_card?(issue)
-    card = existing_card.class == (Trello::Card) ? existing_card : _create_card(issue)
+    card = existing_card.nil? ? _create_card(issue) : existing_card
     _update(issue, card)
   end
 
@@ -37,13 +38,11 @@ class TrelloGateway
   end
 
   def _existing_card?(issue)
-    unclaimed_card = @list.cards.detect do |card|
-      card.name == issue.title
-    end
-    return unclaimed_card unless _claimed_list
-    _claimed_list.cards.detect do |card|
-      card.name == issue.title
-    end
+    unclaimed_card = _list_contains_issue?(@list, issue)
+    claimed_card = _list_contains_issue?(@claimed_list, issue)
+    done_card = _list_contains_issue?(@done_list, issue)
+
+    unclaimed_card || claimed_card || done_card
   end
 
   def _create_card(issue)
@@ -54,20 +53,20 @@ class TrelloGateway
     )
   end
 
+  def _list_contains_issue?(list, issue)
+    list.cards.detect do |card|
+      card.name = issue.title
+    end
+  end
+
   def _board(id)
     Trello::Board.find(id)
   end
 
-  def _list
-    list = @board.lists.detect do |list|
-      list.name =~ /#{@repo}/
+  def _list(name)
+    found_list = @board.lists.detect do |list|
+      list.name =~ /#{name}/
     end
-    list = list || Trello::List.create(:name => @repo, :board_id => @board.id)
-  end
-
-  def _claimed_list
-    @board.lists.detect do |list|
-      list.name =~ /Claimed/
-    end
+    found_list || Trello::List.create(:name => name, :board_id => @board.id)
   end
 end
