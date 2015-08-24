@@ -22,6 +22,7 @@ class TrelloGateway
   def create_or_update_card(issue)
     existing_card = _existing_card?(issue)
     card = existing_card.nil? ? _create_card(issue) : existing_card
+    card.save!
   end
 
   def _existing_card?(issue)
