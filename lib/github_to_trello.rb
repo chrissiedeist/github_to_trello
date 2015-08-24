@@ -2,9 +2,7 @@ require_relative './github_to_trello/github_gateway'
 require_relative './github_to_trello/trello_gateway'
 require 'octokit'
 require 'trello'
-require 'dotenv'
 
-Dotenv.load
 
 class GithubToTrello
   def initialize(public_key, token, board_id, repo_name)
