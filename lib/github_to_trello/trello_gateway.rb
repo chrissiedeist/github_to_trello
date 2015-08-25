@@ -5,7 +5,7 @@ DAYS_TIL_OLD = 14
 DAYS_TIL_REALLY_OLD = 28
 
 class TrelloGateway
-  attr_reader :list, :board
+  attr_reader :list, :board, :claimed_list, :done_list
 
   def initialize(public_key, token, board_id, repo_name)
     Trello.configure do |c|

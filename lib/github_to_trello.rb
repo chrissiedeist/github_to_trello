@@ -20,15 +20,17 @@ class GithubToTrello
   end
 end
 
-if __FILE__ == $PROGRAM_NAME
-  public_key = ENV["PUBLIC_KEY"]
-  token = ENV["TOKEN"]
-  board_id = ENV["BOARD_ID"]
-  repos = ENV["REPOS"].split(",")
-
-  repos.each do |repo|
-    puts "Updating repo: #{repo}"
-    GithubToTrello.new(public_key, token, board_id, repo).update
-  end
-end
+# Example usage with dotenv gem and .env file
+#
+# if __FILE__ == $PROGRAM_NAME
+#   public_key = ENV["PUBLIC_KEY"]
+#   token = ENV["TOKEN"]
+#   board_id = ENV["BOARD_ID"]
+#   repos = ENV["REPOS"].split(",")
+#
+#   repos.each do |repo|
+#     puts "Updating repo: #{repo}"
+#     GithubToTrello.new(public_key, token, board_id, repo).update
+#   end
+# end
 
