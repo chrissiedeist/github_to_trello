@@ -16,8 +16,6 @@ describe TrelloGateway do
       :body => "This is a test",
       :html_url => "https://github.com/chrissiedeist/django_blog/issues/1",
     )
-    @claimed_list = @gateway.instance_variable_get(:@claimed_list)
-    @done_list = @gateway.instance_variable_get(:@done_list)
   end
 
   after(:each) do
@@ -26,14 +24,67 @@ describe TrelloGateway do
     end
   end
 
-  describe "attr accessors" do
+  describe "initialization" do
     it "has a list named for the repo" do
       expect(@gateway.list).to be_a Trello::List
       expect(@gateway.list.name).to eq("django_blog")
     end
 
+    it "has a list called 'Claimed'" do
+      expect(@gateway.list).to be_a Trello::List
+      expect(@gateway.claimed_list.name).to eq("Claimed")
+    end
+
+    it "has a list called 'Done'" do
+      expect(@gateway.list).to be_a Trello::List
+      expect(@gateway.done_list.name).to eq("Done")
+    end
+
     it "has a board" do
       expect(@gateway.board).to be_a Trello::Board
+    end
+  end
+
+  describe "_existing_card?" do
+    it "returns the existing trello card if the card exists in it's repos list" do
+      card = @gateway.create_or_update_card(@issue)
+
+      existing_card = @gateway._existing_card?(@issue) 
+      expect(existing_card).to be_a(Trello::Card)
+      expect(existing_card.name).to eq("Test")
+    end
+
+    it "returns the existing trello card if the card exists in the 'Claimed' list" do
+      card = @gateway.create_or_update_card(@issue)
+      card.move_to_list(@gateway.claimed_list.id)
+
+      existing_card = @gateway._existing_card?(@issue) 
+      expect(existing_card).to be_a(Trello::Card)
+      expect(existing_card.name).to eq("Test")
+    end
+
+    it "returns the existing trello card if the card exists in the 'Done' list" do
+      card = @gateway.create_or_update_card(@issue)
+      card.move_to_list(@gateway.done_list.id)
+
+      existing_card = @gateway._existing_card?(@issue) 
+      expect(existing_card).to be_a(Trello::Card)
+      expect(existing_card.name).to eq("Test")
+    end
+
+    it "returns nil if no card has been created for the issue" do
+      not_the_issue = double(:issue,
+        :title => "Test 2",
+        :id => "91374796",
+        :updated_at => Date.today.to_s,
+        :body => "This is a test",
+        :html_url => "https://github.com/chrissiedeist/django_blog/issues/2",
+      )
+
+      @gateway.create_or_update_card(not_the_issue)
+
+      existing_card = @gateway._existing_card?(@issue) 
+      expect(existing_card).to be_nil
     end
   end
 
@@ -62,16 +113,16 @@ describe TrelloGateway do
         :html_url => "https://github.com/chrissiedeist/django_blog/issues/1",
       )
 
-      @claimed_list.cards.length.should == 0
+      @gateway.claimed_list.cards.length.should == 0
 
       card = @gateway.create_or_update_card(issue)
       card.list.name.should == "django_blog"
 
-      card.move_to_list(@claimed_list.id)
+      card.move_to_list(@gateway.claimed_list.id)
       card = @gateway.create_or_update_card(issue)
 
       card.list.name.should == "Claimed"
-      @claimed_list.cards.length.should == 1
+      @gateway.claimed_list.cards.length.should == 1
       @gateway.list.cards.length.should == 0
     end
 
@@ -84,16 +135,16 @@ describe TrelloGateway do
         :html_url => "https://github.com/chrissiedeist/django_blog/issues/1",
       )
 
-      @done_list.cards.length.should == 0
+      @gateway.done_list.cards.length.should == 0
 
       card = @gateway.create_or_update_card(issue)
       card.list.name.should == "django_blog"
 
-      card.move_to_list(@done_list.id)
+      card.move_to_list(@gateway.done_list.id)
       card = @gateway.create_or_update_card(issue)
 
       card.list.name.should == "Done"
-      @done_list.cards.length.should == 1
+      @gateway.done_list.cards.length.should == 1
       @gateway.list.cards.length.should == 0
     end
   end
