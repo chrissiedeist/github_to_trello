@@ -50,6 +50,7 @@ describe TrelloGateway do
       card = @gateway.create_or_update_card(@issue)
 
       expect(card.list.cards.length).to eq(1)
+      expect(card.name).to eq("Test")
     end
 
     it "does not add a duplicate card if card exists in a list called 'claimed'" do

@@ -21,13 +21,14 @@ class TrelloGateway
 
   def create_or_update_card(issue)
     existing_card = _existing_card?(issue)
-    card = existing_card.nil? ? _create_card(issue) : existing_card
+    existing_card.nil? ? _create_card(issue) : existing_card
   end
 
   def _existing_card?(issue)
     unclaimed_card = _list_contains_issue?(@list, issue)
     claimed_card = _list_contains_issue?(@claimed_list, issue)
     done_card = _list_contains_issue?(@done_list, issue)
+
     unclaimed_card || claimed_card || done_card
   end
 
