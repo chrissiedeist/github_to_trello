@@ -96,6 +96,15 @@ describe TrelloGateway do
       expect(card.list.name).to eq("django_blog")
     end
 
+    it "includes a checklist with item for initial response when creating cards" do
+      card = @gateway.create_or_update_card(@issue)
+      expect(card.checklists.length).to eq 1
+
+      checklist = card.checklists.first
+      expect(checklist.items.length).to eq 1
+      expect(checklist.items.first.name).to eq "Initial Response"
+    end
+
     it "does not add a duplicate card if card exits in list already" do
       card = @gateway.create_or_update_card(@issue)
       card = @gateway.create_or_update_card(@issue)

@@ -33,11 +33,19 @@ class TrelloGateway
   end
 
   def _create_card(issue)
-    Trello::Card.create(
+    card = Trello::Card.create(
       :name => issue.title,
       :list_id => @list.id,
-      :desc => issue.body + "\n" + issue.html_url + "\n" + issue.updated_at.to_s
+      :desc => issue.body + "\n" + issue.html_url + "\n" + issue.updated_at.to_s,
     )
+    _add_checklist_to(card)
+    card
+  end
+
+  def _add_checklist_to(card)
+    checklist = Trello::Checklist.create(:name => "Todo", :board_id => @board.id)
+    checklist.add_item("Initial Response")
+    card.add_checklist(checklist)
   end
 
   def _list_contains_issue?(list, issue)
