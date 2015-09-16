@@ -5,37 +5,48 @@ DAYS_TIL_OLD = 14
 DAYS_TIL_REALLY_OLD = 28
 
 class TrelloGateway
-  attr_reader :list, :board, :claimed_list, :done_list
+  attr_reader :board, :inbox
 
-  def initialize(public_key, token, board_id, repo_name)
-    Trello.configure do |c|
-      c.developer_public_key = public_key
-      c.member_token = token
+  def initialize(options)
+    [:public_key, :token, :board_id, :inbox_name].each do |required_field|
+      _raise_argument_error(required_field) unless options[required_field]
     end
 
-    @board = _board(board_id)
-    @list = _list(repo_name)
-    @claimed_list = _list("Claimed")
-    @done_list = _list("Done")
+    Trello.configure do |c|
+      c.developer_public_key = options[:public_key]
+      c.member_token = options[:token]
+    end
+
+    @board = _board(options[:board_id])
+    @inbox = _list(options[:inbox_name])
   end
 
   def create_or_update_card(issue)
-    existing_card = _existing_card?(issue)
+    existing_card = _existing_card(issue)
     existing_card.nil? ? _create_card(issue) : existing_card
   end
 
-  def _existing_card?(issue)
-    unclaimed_card = _list_contains_issue?(@list, issue)
-    claimed_card = _list_contains_issue?(@claimed_list, issue)
-    done_card = _list_contains_issue?(@done_list, issue)
+  def lists
+    board.lists
+  end
 
-    unclaimed_card || claimed_card || done_card
+  def _raise_argument_error(field)
+    raise "Argument '#{field}' is required yet missing"
+  end
+
+  def _existing_card(issue)
+    lists.each do |list|
+      list.cards.each do |card|
+        return card if card.name == issue.title
+      end
+    end
+    nil
   end
 
   def _create_card(issue)
     card = Trello::Card.create(
       :name => issue.title,
-      :list_id => @list.id,
+      :list_id => inbox.id,
       :desc => issue.body + "\n" + issue.html_url + "\n" + issue.updated_at.to_s,
     )
     _add_checklist_to(card)
@@ -43,15 +54,9 @@ class TrelloGateway
   end
 
   def _add_checklist_to(card)
-    checklist = Trello::Checklist.create(:name => "Todo", :board_id => @board.id)
+    checklist = Trello::Checklist.create(:name => "Todo", :board_id => board.id)
     checklist.add_item("Initial Response")
     card.add_checklist(checklist)
-  end
-
-  def _list_contains_issue?(list, issue)
-    list.cards.detect do |card|
-      card.name == issue.title
-    end
   end
 
   def _board(id)
@@ -59,9 +64,9 @@ class TrelloGateway
   end
 
   def _list(name)
-    found_list = @board.lists.detect do |list|
+    found_list = board.lists.detect do |list|
       list.name =~ /#{name}/
     end
-    found_list || Trello::List.create(:name => name, :board_id => @board.id)
+    found_list || Trello::List.create(:name => name, :board_id => board.id)
   end
 end
