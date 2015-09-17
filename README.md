@@ -23,14 +23,12 @@ GithubToTrello.new(
 2. A public key and token giving access to that trello account
    - `PUBLIC_KEY` - Log into trello and visit https://trello.com/app-key
    - `TOKEN` - Go to
-     https://trello.com/1/connect?key=...&name=MyApp&response_type=token&scope=read,write
-    (substituting the public key for ... a unique name for MyApp)
+     https://trello.com/1/connect?key=<...>&name=MyApp&response_type=token&scope=read,write
+    (substituting your public key for <...> and replacing 'MyApp' with a unique name)
 
 ## Features
-- Creates a list for specified repo (if a list for that repo is not already present)
-- Creates a list for "Claimed" cards that are being worked on, and a
-  "Done" list for recently completed issues
-- Adds or updates cards for all open issues or PRs in that repo
+- Creates a list for specified repo
+- Adds cards for all open issues or PRs in that repo
 
 Sites used for reference
 - http://www.sitepoint.com/customizing-trello-ruby/
