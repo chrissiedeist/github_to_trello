@@ -6,7 +6,7 @@ require 'github_to_trello/version'
 Gem::Specification.new do |spec|
   spec.name          = "github_to_trello"
   spec.version       = GithubToTrello::VERSION
-  spec.authors       = ["chrissie"]
+  spec.authors       = ["chrissie", "raymondberg"]
   spec.email         = ["chrissie.deist@gmail.com"]
   spec.description   = %q{A gem for converting github issues into trello cards}
   spec.summary       = %q{Pulls github issues from specified repos and automatically creates/populates trello lists with the repo names on a specified board.}
