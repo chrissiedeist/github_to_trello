@@ -1,5 +1,5 @@
 require 'rspec'
-require_relative '../lib/github_to_trello/github_gateway'
+require_relative '../spec_helper'
 
 describe GithubGateway do
   before(:all) do

@@ -1,5 +1,5 @@
 require 'rspec'
-require_relative '../lib/github_to_trello/trello_gateway'
+require_relative '../spec_helper'
 
 describe TrelloGateway do
   before(:each) do
