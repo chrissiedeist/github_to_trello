@@ -7,7 +7,7 @@ describe TrelloGateway do
       :public_key => "56acdaa7404ebcc8bbaffab18428d4d2",
       :token => "08f4481d00aba0091592ad9e0ce7e025ac9e238ead31852fe4a75270fbd562e9",
       :board_id => "5jGWvKui",
-      :repo_name => "django_blog",
+      :inbox_name => "django_blog",
     )
 
     @issue = double(:issue,
