@@ -1,13 +1,17 @@
 require 'rspec'
-require_relative '../lib/github_to_trello/trello_gateway'
+require 'dotenv'
+require_relative '../spec_helper'
+
+Dotenv.load
 
 describe TrelloGateway do
   before(:each) do
+
     @gateway = TrelloGateway.new(
-      :public_key => "56acdaa7404ebcc8bbaffab18428d4d2",
-      :token => "08f4481d00aba0091592ad9e0ce7e025ac9e238ead31852fe4a75270fbd562e9",
-      :board_id => "5jGWvKui",
-      :inbox_name => "django_blog",
+      :public_key => ENV["TRELLO_PUBLIC_KEY"] || "56acdaa7404ebcc8bbaffab18428d4d2",
+      :token => ENV["TRELLO_TOKEN"] || "08f4481d00aba0091592ad9e0ce7e025ac9e238ead31852fe4a75270fbd562e9",
+      :board_id => ENV["TRELLO_BOARD_ID"] || "5jGWvKui",
+      :inbox_name => ENV["TRELLO_INBOX_NAME"] || "django_blog",
     )
 
     @issue = double(:issue,
