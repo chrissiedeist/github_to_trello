@@ -1,5 +1,7 @@
 ## Overview
-Generates trello cards on a specified board for all open issues in specified github repo(s).
+Generates trello cards on a specified board for all open issues in specified github repo(s). 
+- Creates a list for specified repo (if a list for that repo is not already present)
+- Adds or updates cards for all open issues or PRs in that repo
 
 ## Usage
 
@@ -9,12 +11,12 @@ After completing [prerequisites](#prerequisites):
 ```
 require 'github_to_trello'
 
-GithubToTrello.new(
-  :public_key => "your_public_key",
-  :token => "your_token",
-  :board_id => "your_trello_board_id",
-  :inbox_name => "your_name/your_repo",
-).update
+public_key = "your_public_key"
+token = "your_token"
+board_id "your_trello_board_id"
+repo_name = "your_name/your_repo"
+
+GithubToTrello.new(public_key, token, board_id, repo_name).update
 ```
 
 ## Prerequisites
@@ -23,14 +25,6 @@ GithubToTrello.new(
 2. A public key and token giving access to that trello account
    - `PUBLIC_KEY` - Log into trello and visit https://trello.com/app-key
    - `TOKEN` - Go to
-     https://trello.com/1/connect?key=<...>&name=MyApp&response_type=token&scope=read,write
-    (substituting your public key for <...> and replacing 'MyApp' with a unique name)
-
-## Features
-- Creates a list for specified repo
-- Adds cards for all open issues or PRs in that repo
-
-Sites used for reference
-- http://www.sitepoint.com/customizing-trello-ruby/
-- https://github.com/jeremytregunna/ruby-trello/blob/master/lib/trello/card.rb
+     https://trello.com/1/connect?key=...&name=MyApp&response_type=token&scope=read,write 
+    (substituting the public key for ... a unique name for MyApp)
 
